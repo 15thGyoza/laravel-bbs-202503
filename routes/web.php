@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PagesController::class, 'root'])->name('root');
@@ -34,3 +35,9 @@ Route::post('password/confirm', [ConfirmPasswordController::class, 'confirm']);
 Route::get('email/verify', [VerificationController::class, 'show'])->name('verification.notice');
 Route::get('email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
 Route::post('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+
+// 用户资源路由
+Route::resource('users', UsersController::class)->only(['show', 'edit', 'update']);
+// GET|HEAD /users/{user} 访问用户个人资料
+// PUT|PATCH /users/{user} 更新用户个人资料
+// GET|HEAD /users/{user}/edit 显示编辑用户个人资料的表单

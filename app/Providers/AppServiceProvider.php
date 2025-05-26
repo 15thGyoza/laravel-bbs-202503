@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Listeners\EmailVerified;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // 注册事件监听
+        // https://laravel.com/docs/12.x/events
+        Event::listen(
+            EmailVerified::class, // 事件类, 在用户完成邮箱验证后触发
+        );
     }
 }
