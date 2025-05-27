@@ -26,13 +26,13 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
-                            <img src="{{ asset('images/avatar.png') }}"
+                            <img src="{{ auth()->user()->avatar }}"
                                  class="img-responsive img-circle" width="30px" height="30px" alt="">
                             {{ auth()->user()->name }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="">{{ __('Profile') }}</a>
-                            <a class="dropdown-item" href="">{{ __('Edit Profile') }}</a>
+                            <a class="dropdown-item" href="{{ route('users.show', auth()->user()) }}">{{ __('Profile') }}</a>
+                            <a class="dropdown-item" href="{{ route('users.edit', auth()->user()) }}">{{ __('Edit Profile') }}</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" id="logout" href="#">
                                 <form action="{{ route('logout') }}" method="POST">
