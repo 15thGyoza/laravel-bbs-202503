@@ -1,3 +1,18 @@
+@php
+    use App\Models\Category;
+
+    $categories = Category::all();
+
+    // 为了代码清晰和避免在循环中重复调用，可以先获取当前分类ID (如果存在)
+    // 假设你的分类路由参数名为 'category' (例如 categories/{category})
+    // 如果路由模型绑定生效，request()->route('category') 会是 Category 模型实例
+    // 如果没有，它会是 ID
+    $currentCategoryParam = request()->route('category');
+    $currentCategoryId = null;
+    if ($currentCategoryParam) {
+        $currentCategoryId = $currentCategoryParam instanceof Category ? $currentCategoryParam->id : $currentCategoryParam;
+    }
+@endphp
 <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-static-top">
     <div class="container">
         <!-- Branding Image -->
@@ -11,8 +26,16 @@
 
         <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
-            <ul class="navbar-nav">
-
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item "><a class="nav-link {{ request()->routeIs('topics.index') ? 'active' : '' }}" href="{{ route('topics.index') }}">Topics</a></li>
+                @if($categories->count())
+                    @foreach($categories as $category)
+                        <li class="nav-item">
+                            <a class="nav-link {{ (request()->routeIs('categories.show') && $currentCategoryId == $category->id) ? 'active' : '' }}"
+                               href="{{ route('categories.show', $category->id) }}">{{ __($category->name) }}</a>
+                        </li>
+                    @endforeach
+                @endif
             </ul>
 
             <!-- Right Side Of Navbar -->
@@ -24,20 +47,24 @@
                     </li>
                 @else
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <img src="{{ auth()->user()->avatar }}"
                                  class="img-responsive img-circle" width="30px" height="30px" alt="">
                             {{ auth()->user()->name }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('users.show', auth()->user()) }}">{{ __('Profile') }}</a>
-                            <a class="dropdown-item" href="{{ route('users.edit', auth()->user()) }}">{{ __('Edit Profile') }}</a>
+                            <a class="dropdown-item"
+                               href="{{ route('users.show', auth()->user()) }}">{{ __('Profile') }}</a>
+                            <a class="dropdown-item"
+                               href="{{ route('users.edit', auth()->user()) }}">{{ __('Edit Profile') }}</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" id="logout" href="#">
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
-                                    <button class="btn btn-block btn-danger" type="submit" name="button">{{ __('Logout') }}</button>
+                                    <button class="btn btn-block btn-danger" type="submit"
+                                            name="button">{{ __('Logout') }}</button>
                                 </form>
                             </a>
                         </div>

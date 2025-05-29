@@ -6,7 +6,9 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\TopicsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,3 +43,9 @@ Route::resource('users', UsersController::class)->only(['show', 'edit', 'update'
 // GET|HEAD /users/{user} 访问用户个人资料
 // PUT|PATCH /users/{user} 更新用户个人资料
 // GET|HEAD /users/{user}/edit 显示编辑用户个人资料的表单
+
+// topic 资源路由
+Route::resource('topics', TopicsController::class);
+
+// 按照分类显示话题
+Route::resource('categories', CategoryController::class)->only('show');

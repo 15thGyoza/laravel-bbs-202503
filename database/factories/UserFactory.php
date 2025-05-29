@@ -2,12 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 class UserFactory extends Factory
 {
@@ -15,6 +16,19 @@ class UserFactory extends Factory
      * The current password being used by the factory.
      */
     protected static ?string $password;
+
+    /**
+     * 系统默认头像
+     *
+     * @var array|string[]
+     */
+    public array $avatars = [
+        "/uploads/images/default-avatar/200.jpg",
+        "/uploads/images/default-avatar/300.jpg",
+        "/uploads/images/default-avatar/400.jpg",
+        "/uploads/images/default-avatar/500.jpg",
+        "/uploads/images/default-avatar/600.jpg",
+    ];
 
     /**
      * Define the model's default state.
@@ -27,8 +41,10 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => static::$password ??= Hash::make('11111111'),
             'remember_token' => Str::random(10),
+            'introduction' => fake()->sentence(),
+            'avatar' => config('app.url') . fake()->randomElement($this->avatars), // 随机选择一个默认头像
         ];
     }
 
