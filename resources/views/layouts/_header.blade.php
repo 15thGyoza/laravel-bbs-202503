@@ -46,6 +46,11 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                     </li>
                 @else
+                    <li class="nav-item">
+                        <a class="nav-link mt-1 mr-3 font-weight-bold" href="{{ route('topics.create') }}">
+                            <i class="fa-solid fa-plus"></i>
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown"
@@ -56,12 +61,18 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item"
-                               href="{{ route('users.show', auth()->user()) }}">{{ __('Profile') }}</a>
+                               href="{{ route('users.show', auth()->user()) }}">
+                                <i class="far fa-user mr-2"></i>&nbsp;
+                                {{ __('Profile') }}
+                            </a>
                             <a class="dropdown-item"
-                               href="{{ route('users.edit', auth()->user()) }}">{{ __('Edit Profile') }}</a>
+                               href="{{ route('users.edit', auth()->user()) }}">
+                                <i class="far fa-edit mr-2"></i>&nbsp;
+                                {{ __('Edit Profile') }}
+                            </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" id="logout" href="#">
-                                <form action="{{ route('logout') }}" method="POST">
+                                <form action="{{ route('logout') }}" method="POST" onsubmit="return confirm('Are you sure you want to log out?');">
                                     @csrf
                                     <button class="btn btn-block btn-danger" type="submit"
                                             name="button">{{ __('Logout') }}</button>

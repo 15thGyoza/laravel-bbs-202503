@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Observers\TopicObserver;
 use Database\Factories\TopicFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $title 标题
@@ -49,11 +51,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Topic withOrder(string $order)
  * @mixin \Eloquent
  */
+#[ObservedBy(TopicObserver::class)]
 class Topic extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'body', 'user_id', 'category_id', 'reply_count', 'view_count', 'last_reply_user_id', 'order', 'excerpt', 'slug'];
+    protected $fillable = ['title', 'body', 'category_id', 'excerpt', 'slug'];
 
     /**
      * Topic belongs to a User.

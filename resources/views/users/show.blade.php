@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $user->name . ' `s Profile')
+@section('title', $user->name . ' のプロフィール')
 
 @section('content')
 
@@ -31,7 +31,11 @@
             {{-- 用户发布的内容 --}}
             <div class="card ">
                 <div class="card-body">
-                    {{ __('No data available. 📭') }}
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item"><a class="nav-link active bg-transparent" href="#">{{ __('Topics') }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">{{ __('Replies') }}</a></li>
+                    </ul>
+                    @include('users._topics', ['topics' => $user->topics()->recent()->paginate(5)])
                 </div>
             </div>
 
