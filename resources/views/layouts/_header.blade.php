@@ -27,7 +27,7 @@
         <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item "><a class="nav-link {{ request()->routeIs('topics.index') ? 'active' : '' }}" href="{{ route('topics.index') }}">Topics</a></li>
+                <li class="nav-item "><a class="nav-link {{ request()->routeIs('topics.index') ? 'active' : '' }}" href="{{ route('topics.index') }}">{{ __('Topics') }}</a></li>
                 @if($categories->count())
                     @foreach($categories as $category)
                         <li class="nav-item">
@@ -49,6 +49,11 @@
                     <li class="nav-item">
                         <a class="nav-link mt-1 mr-3 font-weight-bold" href="{{ route('topics.create') }}">
                             <i class="fa-solid fa-plus"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item notification-badge">
+                        <a class="nav-link ms-3 me-3 badge bg-secondary rounded-pill badge-{{ auth()->user()->notification_count > 0 ? 'hint' : 'secondary' }} text-white" href="{{ route('notifications.index') }}">
+                            {{ auth()->user()->notification_count }}
                         </a>
                     </li>
                     <li class="nav-item dropdown">

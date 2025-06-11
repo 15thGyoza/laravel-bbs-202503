@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedInteger('last_reply_user_id')->index()->nullable()->comment('最后回复用户ID');
             $table->unsignedInteger('order')->default(0)->comment('排序');
             $table->text('excerpt')->nullable()->comment('摘要');
-            $table->string('slug')->nullable()->comment('别名');
+            $table->text('slug')->nullable()->comment('别名');
             $table->timestamps();
         });
     }

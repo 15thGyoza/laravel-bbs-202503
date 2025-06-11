@@ -12,7 +12,6 @@ use Illuminate\Foundation\Http\FormRequest;
  *
  * @property $avatar
  */
-
 class UserRequest extends FormRequest
 {
     /**

@@ -5,7 +5,15 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTopicRequest extends FormRequest
+/**
+ * Class StoreReplyRequest
+ * This request class handles the validation for storing a reply.
+ *
+ * @package App\Http\Requests
+ * @property string $content The content of the reply.
+ * @property int $topic_id The ID of the topic to which the reply belongs.
+ */
+class StoreReplyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +31,7 @@ class UpdateTopicRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|min:3|max:30',
-            'body' => 'required|min:3',
-            'category_id' => 'required|exists:categories,id',
+            'content' => 'required|min:2'
         ];
     }
 }

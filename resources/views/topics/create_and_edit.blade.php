@@ -40,9 +40,9 @@
                                     <div class="mb-3">
                                         <select class="form-control" name="category_id" required>
                                             <option value="" hidden disabled
-                                                    selected>{{ __('Please select a category.') }}</option>
+                                                    {{ $topic->id ? '' : 'selected'}}>{{ __('Please select a category.') }}</option>
                                             @foreach ($categories as $value)
-                                                <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                <option value="{{ $value->id }}" {{ $topic->category_id == $value->id ? 'selected' : '' }}>{{ $value->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -86,6 +86,16 @@
             window.$(document).ready(function() {
                 const editor = new Simditor({
                     textarea: window.$('#editor'),
+                    upload: {
+                        url: '{{ route('topics.upload_image') }}',
+                        params: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        fileKey: 'upload_file',
+                        connectionCount: 3,
+                        leaveConfirm: '{{ __('Uploading is in progress, are you sure to leave this page?') }}',
+                    },
+                    pasteImage: true,
                 });
             });
         }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
 use Database\Factories\UserFactory;
@@ -46,12 +47,41 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|User whereIntroduction($value)
  * @property-read Collection<int, Topic> $topics
  * @property-read int|null $topics_count
+ * @property-read Collection<int, Reply> $replies
+ * @property-read int|null $replies_count
+ * @property int $notification_count
+ * @method static Builder<static>|User whereNotificationCount($value)
  * @mixin \Eloquent
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, MustVerifyEmailTrait;
+    use HasFactory, MustVerifyEmailTrait;
+
+    use Notifiable {
+        notify as protected laravelNotify;
+    }
+
+    /**
+     * Rewrite the notify method to handle notifications.
+     *
+     * @param $instance
+     * @return void
+     */
+    public function notify($instance): void
+    {
+        // If the notification is a VerifyEmail notification, we don't want to notify the user and if the notification is for the current user.
+        if ($this->id === auth()->id() && get_class($instance) !== VerifyEmail::class) {
+            return;
+        }
+
+        // 只有数据库类型的通知才需要提醒, 直接发送 Email 或者其他的都不需要增加通知计数
+        if (method_exists($instance, 'toDatabase')) {
+            $this->increment('notification_count');
+        }
+
+        $this->laravelNotify($instance);
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -97,5 +127,38 @@ class User extends Authenticatable implements MustVerifyEmail
     public function topics(): HasMany
     {
         return $this->hasMany(Topic::class);
+    }
+
+    /**
+     * Check if the user is the author of the given model.
+     *
+     * @param $model
+     * @return bool
+     */
+    public function isAuthorOf($model): bool
+    {
+        return $this->id === $model->user_id;
+    }
+
+    /**
+     * User has many replies.
+     *
+     * @return HasMany
+     */
+    public function replies(): HasMany
+    {
+        return $this->hasMany(Reply::class);
+    }
+
+    /**
+     * Mark all notifications as read.
+     *
+     * @return void
+     */
+    public function markAsRead(): void
+    {
+        $this->notification_count = 0;
+        $this->save();
+        $this->notifications->markAsRead();
     }
 }

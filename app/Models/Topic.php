@@ -6,13 +6,14 @@ use App\Observers\TopicObserver;
 use Database\Factories\TopicFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $title 标题
@@ -49,6 +50,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Topic recent()
  * @method static Builder<static>|Topic recentReplied()
  * @method static Builder<static>|Topic withOrder(string $order)
+ * @property-read Collection<int, Reply> $replies
+ * @property-read int|null $replies_count
  * @mixin \Eloquent
  */
 #[ObservedBy(TopicObserver::class)]
@@ -79,6 +82,16 @@ class Topic extends Model
     }
 
     /**
+     * A topic can have many replies.
+     *
+     * @return HasMany
+     */
+    public function replies(): HasMany
+    {
+        return $this->hasMany(Reply::class);
+    }
+
+    /**
      * Scope a query to order topics based on the specified order.
      *
      * @param $query
@@ -100,10 +113,10 @@ class Topic extends Model
     /**
      * Scope a query to order topics by creation date.
      *
-     * @param Builder $query
+     * @param $query
      * @return Builder
      */
-    public function scopeRecent(Builder $query): Builder
+    public function scopeRecent($query): Builder
     {
         return $query->orderBy('created_at', 'desc');
     }
@@ -119,5 +132,34 @@ class Topic extends Model
         // 当话题有新回复时，我们将编写逻辑来更新话题模型的 reply_count 属性，
         // 此时会自动触发框架对数据模型 updated_at 时间戳的更新
         return $query->orderBy('updated_at', 'desc');
+    }
+
+    /**
+     * Generate a link to the topic.
+     *
+     * @param array $params Additional parameters to include in the link.
+     * @return string
+     */
+    public function link(array $params = []): string
+    {
+        // http://example.com/topics/1/slug
+        // http://example.com/topics/当前 topic 的 ID/经过我们使用 urlencode 过后的 title
+        // http://127.0.0.1:8000/topics/292/福岡大臣会見概要
+        $params = array_merge([$this->id, $this->slug], $params);
+        return route('topics.show', $params);
+    }
+
+    /**
+     * Update the reply count for the topic.
+     *
+     * This method counts the number of replies associated with the topic
+     * and updates the reply_count attribute accordingly.
+     *
+     * @return void
+     */
+    public function updateReplyCount(): void
+    {
+        $this->reply_count = $this->replies->count();
+        $this->save();
     }
 }

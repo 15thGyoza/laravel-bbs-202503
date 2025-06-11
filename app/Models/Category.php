@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * 
@@ -20,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder<static>|Category whereId($value)
  * @method static Builder<static>|Category whereName($value)
  * @method static Builder<static>|Category wherePostCount($value)
+ * @method static Builder<static>|Category recent()
  * @mixin \Eloquent
  */
 class Category extends Model

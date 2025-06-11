@@ -2,16 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Topic;
+use App\Models\Reply;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Faker\Factory as FakerFactory;
 
 /**
- * @extends Factory<Topic>
+ * @extends Factory<Reply>
  */
-class TopicFactory extends Factory
+class ReplyFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -27,18 +25,10 @@ class TopicFactory extends Factory
         // 确保 updatedAt 大于等于 createdAt
         $updatedAt = $this->faker->dateTimeBetween($createdAt, 'now');
 
-        $fakerJa = FakerFactory::create('ja_JP');
-
-        $title = $fakerJa->realText(30);
-        $body = $fakerJa->realText(600);
-
         return [
-            'title' => $title,
-            'body' => $body,
+            'content' => $this->faker->realText(150),
+            'topic_id' => DB::table('topics')->inRandomOrder()->value('id'),
             'user_id' => DB::table('users')->inRandomOrder()->value('id'),
-            'category_id' => DB::table('categories')->inRandomOrder()->value('id'),
-            'excerpt' => Str::limit($body, 50),
-            'slug' => rawurlencode(Str::replace(' ', '-', $title)),
             'created_at' => $createdAt,
             'updated_at' => $updatedAt,
         ];

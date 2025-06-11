@@ -34,7 +34,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ $routeHasQueryOrder && $currentOrder == 'recent' ? 'active' : '' }}"
-                               href="{{ Request::url() }}?order=recent">{{ __('New published') }}</a>
+                               href="{{ Request::url() }}?order=recent">{{ __('New Published') }}</a>
                         </li>
                     </ul>
                 </div>
