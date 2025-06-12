@@ -17,7 +17,9 @@
     <div class="container">
         <!-- Branding Image -->
         <a class="navbar-brand " href="{{ url('/') }}">
-            {{ config('app.name', 'Pandaria') }}
+            <img src="{{ asset('uploads/images/title-icon/logo.png') }}" width="25" height="25" alt="logo" style="margin-right:2px;vertical-align:-5px;
+            mask-image: radial-gradient(circle, #000 100%, transparent 100%);">
+            {{ config('app.name') }}
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

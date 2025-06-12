@@ -4,7 +4,7 @@
 @section('content')
     <div class="container my-4 my-lg-5">
         <div class="card shadow-sm">
-            <div class="card-header bg-success text-white">
+            <div class="card-header bg-[#4B2066] text-white" style="background-color: #4B2066 !important; color: #fff !important;">
                 <h1 class="h3 mb-0">World of Warcraft: Mists of Pandaria</h1>
             </div>
             <div class="card-body">

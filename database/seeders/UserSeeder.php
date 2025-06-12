@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
         $user = User::find(1);
         $user->name = 'LiRundian';
         $user->email = 'Lirundian2010@gmail.com';
-        $user->avatar = config('app.url') . '/uploads/images/default-avatar/400.jpg';
+        $user->avatar = config('app.url') . '/uploads/images/default-avatar/supermanager.jpg';
         $user->save();
     }
 }

@@ -27,10 +27,8 @@ class TopicFactory extends Factory
         // 确保 updatedAt 大于等于 createdAt
         $updatedAt = $this->faker->dateTimeBetween($createdAt, 'now');
 
-        $fakerJa = FakerFactory::create('ja_JP');
-
-        $title = $fakerJa->realText(30);
-        $body = $fakerJa->realText(600);
+        $title = $this->faker->realText(30);
+        $body = $this->faker->realText(600);
 
         return [
             'title' => $title,

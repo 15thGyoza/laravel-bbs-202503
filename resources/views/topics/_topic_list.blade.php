@@ -12,7 +12,7 @@
 
                     <div class="mt-0 mb-1">
                         <a href="{{ $topic->link() }}" title="{{ $topic->title }}">
-                            {{ $topic->title }}
+                            <span style="font-weight: 549;">{{ $topic->title }}</span>
                         </a>
                         <a class="float-end" href="{{ $topic->link() }}">
                             <span class="badge bg-secondary rounded-pill"> {{ $topic->reply_count }} </span>
