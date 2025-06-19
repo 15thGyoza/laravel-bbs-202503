@@ -19,8 +19,8 @@ class UserSeeder extends Seeder
 
         // 单独处理第一个用户, 方便我们测试
         $user = User::find(1);
-        $user->name = 'LuStormstout';
-        $user->email = 'lustormstout@gmail.com';
+        $user->name = 'LiRundian';
+        $user->email = 'LiRundian2010@gmail.com';
         $user->avatar = config('app.url') . '/uploads/images/default-avatar/400.jpg';
         $user->save();
 
