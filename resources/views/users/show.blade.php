@@ -1,67 +1,56 @@
-@php
-
-    use Illuminate\Support\Facades\Request;
-    $hasRepliesParam = Request::has('tab') && Request::get('tab') === 'replies';
-
-@endphp
-
 @extends('layouts.app')
-
-@section('title', $user->name . ' のプロフィール')
 
 @section('content')
 
-    <div class="row">
+    <div class="container">
+        <div class="col-md-8 offset-md-2">
 
-        <div class="col-lg-3 col-md-3 hidden-sm hidden-xs user-info">
-            <div class="card ">
-                <img class="card-img-top"
-                     src="{{ $user->avatar }}"
-                     alt="{{ $user->name }}">
-                <div class="card-body">
-                    <h5><strong>{{ __('Profile') }}</strong></h5>
-                    <p>{{ $user->introduction }}</p>
-                    <hr>
-                    <h5><strong>{{ __('Joined on') }}</strong></h5>
-                    <p>{{ $user->created_at->diffForHumans() }}</p>
+            <div class="card">
+                <div class="card-header">
+                    <h4>
+                        <i class="glyphicon glyphicon-edit"></i> {{ __('Edit profile') }}
+                    </h4>
                 </div>
-            </div>
-        </div>
-        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-            <div class="card ">
-                <div class="card-body">
-                    <h1 class="mb-0" style="font-size:22px;">{{ $user->name }} <small>{{ $user->email }}</small></h1>
-                </div>
-            </div>
-            <hr>
 
-            {{-- 用户发布的内容 --}}
-            <div class="card ">
                 <div class="card-body">
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link bg-transparent {{ $hasRepliesParam ? '' : 'active' }}" href="{{ route('users.show', $user->id) }}">
-                                {{ __('Topics') }}
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ $hasRepliesParam ? 'active' : '' }}"
-                               href="{{ route('users.show', [$user->id, 'tab' => 'replies']) }}">
-                                {{ __('Replies') }}
-                            </a>
-                        </li>
-                    </ul>
-                    @if (request('tab') === 'replies')
-                        @include('users._replies', [
-                            'replies' => $user->replies()->with('topic')->recent()->paginate(5),
-                        ])
-                    @else
-                        @include('users._topics', [
-                            'topics' => $user->topics()->recent()->paginate(5),
-                        ])
-                    @endif
+                    <form action="{{ route('users.update', $user->id) }}" method="POST" accept-charset="UTF-8"
+                          enctype="multipart/form-data">
+                        @method('PUT')
+                        @csrf
+
+                        @include('shared._error')
+
+                        <div class="mb-3">
+                            <label for="name-field">{{ __('Name') }}</label>
+                            <input class="form-control" type="text" name="name" id="name-field"
+                                   value="{{ old('name', $user->name) }}"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email-field">{{ __('Email') }}</label>
+                            <input class="form-control" type="text" name="email" id="email-field"
+                                   value="{{ old('email', $user->email) }}"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="introduction-field">{{ __('Profile') }}</label>
+                            <textarea name="introduction" id="introduction-field" class="form-control"
+                                      rows="3">{{ old('introduction', $user->introduction) }}</textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label for="avatar" class="avatar-label form-label">{{ __('Avatar') }}</label>
+                            <input type="file" id="avatar" name="avatar" class="form-control">
+                            @if($user->avatar)
+                                <br>
+                                <img class="thumbnail img-responsive" src="{{ $user->avatar }}" width="200"
+                                     alt="Avatar"/>
+                            @endif
+                        </div>
+                        <div class="well well-sm">
+                            <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-@stop
+
+@endsection
