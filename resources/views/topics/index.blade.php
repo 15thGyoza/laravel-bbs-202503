@@ -3,11 +3,15 @@
 
     $routeHasQueryOrder = Request::has('order');
     $currentOrder = Request::get('order', 'default'); // 默认值为 'default'
+    $settings = \App\Models\Setting::getSettingsFromCache();
+    $titlePart1 = $settings['site_name']->value ?? env('APP_NAME');
+    $titlePart2 = isset($category) ? $category->name : __('Topics');
+    $title = "$titlePart1 - $titlePart2";
 
 @endphp
 @extends('layouts.app')
 
-@section('title', isset($category) ? $category->name : __('Topics'))
+@section('title', $title)
 
 @section('content')
 

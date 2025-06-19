@@ -19,9 +19,16 @@ class UserSeeder extends Seeder
 
         // 单独处理第一个用户, 方便我们测试
         $user = User::find(1);
-        $user->name = 'LiRundian';
-        $user->email = 'Lirundian2010@gmail.com';
-        $user->avatar = config('app.url') . '/uploads/images/default-avatar/supermanager.jpg';
+        $user->name = 'LuStormstout';
+        $user->email = 'lustormstout@gmail.com';
+        $user->avatar = config('app.url') . '/uploads/images/default-avatar/400.jpg';
         $user->save();
+
+        // 赋予站长角色
+        $user->assignRole('Founder');
+
+        // 赋予管理员权限
+        $user = User::find(2);
+        $user->assignRole('Maintainer');
     }
 }

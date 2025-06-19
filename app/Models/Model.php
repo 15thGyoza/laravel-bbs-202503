@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- *
+ * 
  *
  * @method static Builder<static>|Model newModelQuery()
  * @method static Builder<static>|Model newQuery()

@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -67,5 +68,48 @@ class UserController extends Controller
 
         $user->update($data);
         return redirect()->route('users.show', $user->id)->with('success', 'Profile updated successfully.');
+    }
+
+    /**
+     * 模拟登录
+     *
+     * @param int $id
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function impersonateUser(int $id, Request $request): RedirectResponse
+    {
+        if (!auth()->user() || !app()->isLocal())  {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $user = User::find($id);
+
+        if ($user) {
+            auth()->user()->impersonate($user);
+            // 获取传递过来的重定向 URL，如果没有则默认重定向到首页
+            $redirectTo = $request->input('redirect_to', '/');
+            return redirect($redirectTo);
+        }
+
+        return redirect()->back()->with('error', 'User not found.');
+    }
+
+    /**
+     * 停止模拟登录
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function stopImpersonating(Request $request): RedirectResponse
+    {
+        if (!auth()->user() || !app()->isLocal())  {
+            abort(403, 'Unauthorized action.');
+        }
+
+        auth()->user()->leaveImpersonation();
+        // 获取传递过来的重定向 URL，如果没有则默认重定向到首页
+        $redirectTo = $request->input('redirect_to', '/');
+        return redirect($redirectTo);
     }
 }
