@@ -8,4 +8,5 @@ window.$ = window.jQuery = $;
 import './bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as bootstrap from 'bootstrap';
+import '../../editor/css/simditor.css';
 window.bootstrap = bootstrap;

@@ -28,6 +28,7 @@
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
+
     "css": [
       "assets/app-COn20UU0.css"
     ]
