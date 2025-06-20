@@ -67,18 +67,19 @@
 @endsection
 
 @section('styles')
-    @vite('resources/editor/css/simditor.css')
+    <link rel="stylesheet" href="{{ asset('editor/css/simditor.css') }}">
 @endsection
 
 @section('scripts')
     @parent
 
-    {{-- 为 Simditor 的所有 JS 文件添加 defer 属性 --}}
-    <script src="{{ Vite::asset('resources/editor/js/module.js') }}" defer></script>
-    <script src="{{ Vite::asset('resources/editor/js/hotkeys.js') }}" defer></script>
-    <script src="{{ Vite::asset('resources/editor/js/uploader.js') }}" defer></script>
-    <script src="{{ Vite::asset('resources/editor/js/simditor.js') }}" defer></script>
+    {{-- 手动插入 jQuery，让 Simditor 能用 --}}
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 
+    <script src="{{ asset('editor/js/module.js') }}"></script>
+    <script src="{{ asset('editor/js/hotkeys.js') }}"></script>
+    <script src="{{ asset('editor/js/uploader.js') }}"></script>
+    <script src="{{ asset('editor/js/simditor.js') }}"></script>
 
     {{-- This is script to initialize Simditor --}}
     <script type="module">
